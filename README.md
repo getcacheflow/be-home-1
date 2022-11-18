@@ -24,7 +24,7 @@ We would like you to create a simple RESTful API service that will support an ap
 
 ### Tips
 Your storage can be anything that you wish.
-Don't worry about authenication. 
+Don't worry about authentication. 
 
 #### Bonus features (always in priority order)
 
