@@ -1,0 +1,107 @@
+openapi: 3.0.1
+info:
+  title: Invoice related APIs
+  description: APIs to support invoice handling.
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+    description: local
+paths:
+  /invoices:
+    get:
+      summary: Retrieve all invoices.
+      operationId: getInvoices
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Status'
+          description: Status of invoice
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetInvoicesResponse'
+    post:
+      summary: Create invoice
+      operationId: createInvoice
+
+      requestBody:
+        description: Invoice related data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateInvoiceResponse'
+components:
+  schemas:
+    Invoice:
+      type: object
+      required:
+        - customerEmail
+        - customerName
+        - description
+        - totalAmount
+        - status
+        - dueDate
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerEmail:
+          type: string
+        customerName:
+          type: string
+        description:
+          type: string
+        totalAmount:
+          type: number
+        dueDate:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/Status'
+        invoiceItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItem'
+    Status:
+      type: string
+      enum:
+        - draft
+        - approved
+        - sent
+        - paid
+    InvoiceItem:
+      type: object
+      required:
+        - description
+        - amount
+      properties:
+        description:
+          type: string
+        amount:
+          type: number
+    GetInvoicesResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+    CreateInvoiceResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
