@@ -33,3 +33,7 @@ Don't worry about authentication.
 
 If you have any questions, ask away!
 
+### Running locally
+
+```mvn spring-boot:run```
+
