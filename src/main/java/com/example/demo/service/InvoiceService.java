@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public interface InvoiceService {
 
-    UUID createInvoice(Invoice invoice);
+    Invoice createInvoice(Invoice invoice);
 
     List<Invoice> getAllInvoicesByStatus(Status status);
 
-    void addInvoiceItemToInvoice(UUID invoiceId, List<InvoiceItem> items);
+    Invoice addInvoiceItemsToInvoice(UUID invoiceId, List<InvoiceItem> items);
 
     Invoice updateInvoice(UUID invoiceId, Invoice updatedInvoice);
 
-    Invoice patchInvoice(UUID invoiceId);
+    Invoice updateInvoiceStatus(UUID invoiceId, Status status);
 }

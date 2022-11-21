@@ -12,11 +12,12 @@ paths:
       summary: Retrieve all invoices.
       operationId: getInvoices
       parameters:
-        - name: status
-          in: query
+        - in: query
+          name: status
           required: true
           schema:
-            $ref: '#/components/schemas/Status'
+            type: string
+            enum: [ draft, sent, approved, paid ]
           description: Status of invoice
       responses:
         '200':
@@ -43,6 +44,88 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateInvoiceResponse'
+  /invoices/{id}:
+    put:
+      summary: Modify existing invoice
+      operationId: updateInvoice
+      parameters:
+        - name: id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      requestBody:
+        description: Invoice related data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInvoiceResponse'
+  /invoices/{id}/status:
+    put:
+      summary: Update invoice status
+      operationId: updateStatus
+      parameters:
+        - name: id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      requestBody:
+        description: Invoice Status
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStatusBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInvoiceStatusResponse'
+  /invoices/{id}/items:
+    post:
+      summary: Add Invoice Item
+      operationId: addItemsToInvoice
+      parameters:
+        - name: id
+          in: path
+          description: Invoice ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      requestBody:
+        description: Invoice Item related data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceItems'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateInvoiceResponse'
+
 components:
   schemas:
     Invoice:
@@ -60,6 +143,7 @@ components:
           format: uuid
         customerEmail:
           type: string
+          format: email
         customerName:
           type: string
         description:
@@ -102,6 +186,28 @@ components:
     CreateInvoiceResponse:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
+        invoice:
+          $ref: '#/components/schemas/Invoice'
+    UpdateInvoiceResponse:
+      type: object
+      properties:
+        invoice:
+          $ref: '#/components/schemas/Invoice'
+    UpdateInvoiceStatusResponse:
+      type: object
+      properties:
+        invoice:
+          $ref: '#/components/schemas/Invoice'
+    UpdateStatusBody:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+    InvoiceItems:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItem'
+

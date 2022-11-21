@@ -6,9 +6,10 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StatusToInvoiceStatusEntityConverter implements Converter<Status, InvoiceStatusEntity> {
+public class InvoiceStatusEntityToStatusConverter implements Converter<InvoiceStatusEntity, Status> {
+
     @Override
-    public InvoiceStatusEntity convert(Status status) {
-        return InvoiceStatusEntity.valueOf(status.name());
+    public Status convert(InvoiceStatusEntity invoiceStatusEntity) {
+        return Status.valueOf(invoiceStatusEntity.name());
     }
 }
